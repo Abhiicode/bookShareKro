@@ -1,4 +1,4 @@
-package com.example.book.sharing.meet.controllers;
+package com.example.book.sharing.meet.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
