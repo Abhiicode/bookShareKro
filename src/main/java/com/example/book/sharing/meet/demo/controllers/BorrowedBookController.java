@@ -27,6 +27,12 @@ public class BorrowedBookController {
         return borrowedBookService.addBorrowedBook(userId, bookId);
     }
 
+    @GetMapping("/testBorrow")
+    public String testBorrow(@RequestParam String param) {
+        return new String("TEST BORROW DUDE");
+    }
+    
+
     @PutMapping("/mark-borrowed/{borrowedBookId}")
     public void markAsBorrowed(@PathVariable Long borrowedBookId, @RequestParam Long borrowedByUserId) {
         borrowedBookService.markAsBorrowed(borrowedBookId, borrowedByUserId);
