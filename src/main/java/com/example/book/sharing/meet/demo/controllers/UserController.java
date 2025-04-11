@@ -2,6 +2,7 @@ package com.example.book.sharing.meet.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.book.sharing.meet.demo.DTOs.LoginRequestDTO;
+import com.example.book.sharing.meet.demo.DTOs.TestDTO;
 import com.example.book.sharing.meet.demo.entities.User;
 import com.example.book.sharing.meet.demo.services.UserService;
 
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -27,6 +30,17 @@ public class UserController {
     public User registerUser(@RequestBody User user) {
         return userService.registerUser(user);
     }
+
+    @PostMapping("/pdfReturn")
+    public String getPdf(@RequestBody TestDTO testDto) {
+        String input = testDto.getInput();
+        String capitalizedText =  userService.capitalizeNthLetter(input);
+        String outputPath = "output.pdf";
+       userService.createPdfWithText(capitalizedText, outputPath);
+        System.out.println("PDF created successfully at: " + outputPath);
+        return "pdf has successfully converted";
+    }
+    
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO loginReq) {

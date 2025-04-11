@@ -1,10 +1,17 @@
 package com.example.book.sharing.meet.demo.services;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.book.sharing.meet.demo.entities.User;
 import com.example.book.sharing.meet.demo.repositories.UserRepository;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,6 +36,47 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    public String capitalizeNthLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+    
+        String[] words = input.split("\\s+");
+        StringBuilder result = new StringBuilder();
+    
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i].toLowerCase(); // start with lowercase
+            int pos = i + 1; // word position (1-based)
+            if (word.length() >= pos) {
+                result.append(word.substring(0, pos - 1))
+                      .append(Character.toUpperCase(word.charAt(pos - 1)))
+                      .append(word.substring(pos));
+            } else {
+                // if word is shorter than its position, just add as-is
+                result.append(word);
+            }
+            result.append(" ");
+        }
+    
+        return result.toString().trim();
+    }
+    
+    
+
+    public  void createPdfWithText(String text, String filePath) {
+        Document document = new Document();
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            PdfWriter.getInstance(document, fos);
+            document.open();
+            document.add(new Paragraph(text));
+            document.close();
+        } catch (DocumentException | IOException e) {
+            System.out.println("LogERrorTrace "+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
 
     @Override
     public User updateUserProfile(Long userId, User user) {
